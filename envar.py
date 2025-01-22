@@ -8,11 +8,8 @@ import os
 from dotenv import load_dotenv
 from typing import Dict
 
-
-
-load_dotenv()
-
-def get_db_config() -> Dict:
+def get_db_config() -> Dict[str, str]:
+    load_dotenv()
     config = {
         'host': os.getenv('DB_HOST'),
         'user': os.getenv('DB_USER'),
@@ -20,12 +17,6 @@ def get_db_config() -> Dict:
         'database': os.getenv('DB_NAME'),
     }
     return config
-    
-
-
-# config = get_db_config()
-
-# print(config)
 
 
 # In[ ]:
