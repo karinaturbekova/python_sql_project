@@ -1,32 +1,23 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 class InvalidInputError(Exception):
-    """Исключение для некорректного ввода данных."""
+    """Exception for invalid input data."""
     def __init__(self, message="Invalid input provided."):
         super().__init__(message)
 
 class DatabaseConnectionError(Exception):
-    """Исключение для ошибок подключения к базе данных."""
+    """Exception for database connection errors."""
     def __init__(self, message="Failed to connect to the database."):
         super().__init__(message)
 
 class QueryExecutionError(Exception):
-    """Исключение для ошибок выполнения запросов."""
+    """Exception for query execution errors."""
     def __init__(self, message="Error occurred during query execution."):
         super().__init__(message)
 
 def validate_string_input(input_value: str, field_name: str) -> str:
     """
-    Проверяет строковый ввод на корректность.
-    - Удаляет лишние пробелы.
-    - Проверяет, что строка не пуста.
+    - Removes extra spaces.
+    - Checks that the string is not empty.
     """
-    if not isinstance(input_value, str):
-        raise InvalidInputError(f"{field_name} must be a string.")
     input_value = input_value.strip()
     if not input_value:
         raise InvalidInputError(f"{field_name} cannot be empty.")
@@ -34,7 +25,7 @@ def validate_string_input(input_value: str, field_name: str) -> str:
 
 def validate_integer_input(input_value: str, field_name: str) -> int:
     """
-    Проверяет ввод на возможность преобразования в целое число.
+    Validates input for conversion to an integer.
     """
     if not input_value.isdigit():
         raise InvalidInputError(f"{field_name} must be a valid integer.")
@@ -42,8 +33,7 @@ def validate_integer_input(input_value: str, field_name: str) -> int:
 
 def validate_db_connection(connection) -> None:
     """
-    Проверяет, активна ли база данных.
+    Checks if the database connection is active.
     """
     if connection is None or not connection.is_connected():
         raise DatabaseConnectionError("The database connection is not active.")
-

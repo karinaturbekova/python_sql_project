@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[3]:
-
-
 from envar import get_db_config
 import mysql.connector
 import db, db_write
@@ -15,6 +9,7 @@ class MovieService:
         self.db_writer = db_writer
 
     def search_by_keyword(self, option_name: str, keyword: str) -> List[Tuple]:
+        # Search movies by keyword for a specific option
         self.db_writer.write_keywords_to_table(keyword) 
         movies: List[Tuple] = []
         if option_name == 'title':
@@ -29,31 +24,29 @@ class MovieService:
         return movies
 
     def genre_list(self) -> List[Tuple]:
+        # Fetch a list of available genres from the database
         genres = self.db_reader.genre_list()
         return genres
 
-    def search_by_genre(self, keyword: str) -> List[Tuple]:      
+    def search_by_genre(self, keyword: str) -> List[Tuple]:
+        # Search for movies by genre
         self.db_writer.write_keywords_to_table(keyword)
         movies = self.db_reader.search_movie_by_genre(keyword)    
         return movies
 
-    def search_by_year(self, year: str) -> List[Tuple]:    
+    def search_by_year(self, year: str) -> List[Tuple]:
+        # Search for movies by release year
         self.db_writer.write_keywords_to_table(year)
         movies = self.db_reader.search_movie_by_release_year(year)      
         return movies
 
     def search_by_genre_and_year(self, genre_keyword: str, year_keyword: str) -> List[Tuple]:
+        # Search for movies by both genre and release year
         self.db_writer.write_keywords_to_table(f'{genre_keyword} {year_keyword}')
         movies = self.db_reader.search_movie_by_genre_release_year(genre_keyword, year_keyword)
         return movies
 
-    def show_popular_searches(self) -> List[Tuple]:    
+    def show_popular_searches(self) -> List[Tuple]:
+        # Fetch the most popular searches from the database
         popular_searches = self.db_reader.get_popular_searches()
         return popular_searches
-
-
-# In[ ]:
-
-
-
-

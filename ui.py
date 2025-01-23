@@ -8,6 +8,7 @@ from my_exceptions import InvalidInputError, QueryExecutionError
 
 class MovieSearchUI:
     def __init__(self, movie_service: service.MovieService):
+        # Initialize the UI with a MovieService instance
         self.movie_service = movie_service
 
     def display_menu(self) -> None:
@@ -26,6 +27,7 @@ class MovieSearchUI:
             print(f"{i}. {option}")
 
     def search_by_keyword(self, option_name: str) -> List[Tuple]:
+        # Search for movies based on a keyword (e.g., title, description, or actor)
         keyword = input(f"Enter a keyword for {option_name}: ")
         try:  
             print(f"Searching movies by {option_name} with keyword: '{keyword}'")
@@ -38,6 +40,7 @@ class MovieSearchUI:
         return []  
 
     def search_by_genre(self) -> List[Tuple]:
+        # Search for movies by genre
         try:  
             genres = self.movie_service.genre_list()
             print("Select a genre:")
@@ -57,6 +60,7 @@ class MovieSearchUI:
         return []  
 
     def select_genre(self, genres: List[Tuple], choice: str) -> str:
+        # Helper method to select a genre based on user input
         try:  
             if choice.isdigit():
                 choice_int = int(choice)
@@ -66,7 +70,8 @@ class MovieSearchUI:
         except Exception:  
             raise InvalidInputError("Invalid genre selection.")  
 
-    def search_by_year(self) -> List[Tuple]:    
+    def search_by_year(self) -> List[Tuple]:
+         # Search for movies by release year
         year = input("Enter a release year: ")
         try:  
             print(f"Searching movies by release year: '{year}'")
@@ -79,6 +84,7 @@ class MovieSearchUI:
         return []  
 
     def search_by_genre_and_year(self) -> List[Tuple]:
+        # Search for movies by both genre and release year
         try:  
             print("First, choose a genre.")  
             genres = self.movie_service.genre_list()
@@ -99,6 +105,7 @@ class MovieSearchUI:
         return []  
 
     def show_popular_searches(self) -> List[Tuple]:
+        # Display the most popular searches
         try:  
             print("Popular Searches:")
             popular_searches = self.movie_service.show_popular_searches()
@@ -108,7 +115,7 @@ class MovieSearchUI:
         return []  
 
     def display_results(self, movies: List[Tuple]) -> None:
-        """Display movies in a tabular format."""
+        # Display movies in a tabular format
         if not movies:
             print("No results found.\n")
             return
@@ -117,6 +124,7 @@ class MovieSearchUI:
         print(tabulate(movies, headers=headers, tablefmt="grid"))
         
     def start(self) -> None:
+        # Start the UI and handle user menu selection
         self.display_menu()
         choice = input("\nEnter your choice (1-8): ")
         movies = []
@@ -135,12 +143,12 @@ class MovieSearchUI:
         elif choice == "7":
             movies = self.show_popular_searches()
         elif choice == "8":
-            print("Goodbye!")
+            print("Goodbye!") # Exit the program
             return 'stop'
         else:
             print("Invalid choice. Please try again.")
             return
         
-        self.display_results(movies)
+        self.display_results(movies) # Display search results
 
 

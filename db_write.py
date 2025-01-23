@@ -14,6 +14,7 @@ class DatabaseWriter:
         self.connection = mysql.connector.connect(**db_config)
 
     def write_keywords_to_table(self, parameter: str) -> str:
+        # Insert a keyword into the search history table
         try:
             parameter = validate_string_input(parameter, "Keyword")
             

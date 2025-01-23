@@ -2,15 +2,16 @@ from envar import get_db_config
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from typing import List, Tuple, Dict
-from my_exceptions import validate_string_input, validate_integer_input, validate_db_connection, QueryExecutionError, QueryExecutionError, InvalidInputError, DatabaseConnectionError
+from my_exceptions import validate_string_input, validate_integer_input, validate_db_connection, QueryExecutionError, InvalidInputError, DatabaseConnectionError
 
 class DatabaseReader:
     def __init__(self, db_config: Dict[str, str]):
         self.connection = mysql.connector.connect(**db_config)
 
     def search_movie_by_title(self, parameter: str) -> List[Tuple]:
+        # Search for movies by title
         try:
-            parameter = validate_string_input(parameter, "Movie Title")
+            parameter = validate_string_input(parameter, "Movie Title") # Validate the input
             with self.connection.cursor() as cursor:
                 query = '''SELECT 
                                 f.title AS film_title,
@@ -37,11 +38,14 @@ class DatabaseReader:
                 result: List[Tuple] = cursor.fetchall()
             return result
         except mysql.connector.Error as e:
+            # Handle database execution errors
             raise QueryExecutionError(f"An error occurred while executing the query: {e}")
         except InvalidInputError as e:
+            # Handle validation errors
             raise InvalidInputError(f"Validation failed for input: {e}")
 
     def search_movie_by_description(self, parameter: str) -> List[Tuple]:
+        # Search for movies by description
         try:
             parameter = validate_string_input(parameter, "Movie Description")
             with self.connection.cursor() as cursor:
@@ -75,6 +79,7 @@ class DatabaseReader:
             raise InvalidInputError(f"Validation failed for input: {e}")
 
     def search_movie_by_actor(self, parameter: str) -> List[Tuple]:
+        # Search for movies by actor name
         try:
             parameter = validate_string_input(parameter, "Actor Name")
             with self.connection.cursor() as cursor:
@@ -108,6 +113,7 @@ class DatabaseReader:
             raise InvalidInputError(f"Validation failed for input: {e}")
 
     def search_movie_by_genre(self, parameter: str) -> List[Tuple]:
+        # Search for movies by genre
         try:
             parameter = validate_string_input(parameter, "Genre")
             with self.connection.cursor() as cursor:
@@ -141,8 +147,9 @@ class DatabaseReader:
             raise InvalidInputError(f"Validation failed for input: {e}")
 
     def search_movie_by_release_year(self, parameter: str) -> List[Tuple]:
+        # Search for movies by release year
         try:
-            parameter = validate_integer_input(parameter, "Release Year")
+            parameter = validate_integer_input(parameter, "Release Year") 
             with self.connection.cursor() as cursor:
                 query = '''SELECT 
                                 f.title AS film_title,
@@ -174,6 +181,7 @@ class DatabaseReader:
             raise InvalidInputError(f"Validation failed for input: {e}")
 
     def search_movie_by_genre_release_year(self, parameter1: str, parameter2: str) -> List[Tuple]:
+        # Search for movies by both genre and release year
         try:
             parameter1 = validate_string_input(parameter1, "Genre")
             parameter2 = validate_integer_input(parameter2, "Release Year")
@@ -208,6 +216,7 @@ class DatabaseReader:
             raise InvalidInputError(f"Validation failed for input: {e}")
 
     def genre_list(self) -> List[Tuple]:
+        # Fetch all available genres from the database
         try:
             validate_db_connection(self.connection)
             with self.connection.cursor() as cursor:
@@ -222,6 +231,7 @@ class DatabaseReader:
             raise QueryExecutionError(f"An error occurred while executing the query: {e}")
 
     def get_popular_searches(self) -> List[Tuple]:
+        # Fetch the most popular search keywords
         try:
             validate_db_connection(self.connection)
             with self.connection.cursor() as cursor:
